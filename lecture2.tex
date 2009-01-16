@@ -1,0 +1,204 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb,amsmath,clrscode,graphicx,indentfirst}
+
+\author{Олег Смирнов}
+\title{Курс kiev-clrs -- Лекция 2. Асимптотическая нотация}
+\date{17 января 2009 г.}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\section{Цель лекции}
+\begin{itemize}
+\item Ввести строгие математические определения для $O$-, $\Omega$- и $\Theta$-нотации 
+\item Рассмотреть методы решения рекурентностей: подстановка, дерево рекурсии и основной метод
+\end{itemize}
+
+\section{Асимптотическая нотация}
+
+\subsection{$O$-обозначения}
+В случае, когда необходимо определить только \emph{асимптотическую верхнюю границу}, используют $O$-обозначения:
+\begin{equation*}
+  f(n) = O(g(n)) \Rightarrow \exists c, n_0 > 0 \text{ такие, что }
+  0 \leqslant f(n) \leqslant c g(n), \forall n > n_0
+\end{equation*}
+
+$O(g(n))$ можно рассматривать как множество функций:
+\begin{equation*}
+  O(g(n)) = \{f(n): \exists c, n_0 > 0 \text{ такие, что }
+  0 \leqslant f(n) \leqslant c g(n), \forall n > n_0
+  \}
+\end{equation*}
+
+Пример:
+\begin{equation*}
+  2n^3 = O(n^3) \text{ для } c = 1, n_0 = 2 \text{ или } 2n^3 \in O(n^3)
+\end{equation*}
+
+Определение через множество можно использовать в качестве ``макроса''
+-- $O$-нотация в формуле обозначает некоторую функцию из соответствующего семейства.
+
+Пример:
+\begin{equation*}
+  n^2 + O(n) = O(n^2) \text{ означает } \forall f(n) \in O(n): \exists h(n) \in O(n^2): n^2 + f(n) = h(n)
+\end{equation*}
+
+\subsection{$\Omega$-обозначения}
+
+Для определения \emph{асимптотическую нижней границы} есть $\Omega$-обозначение:
+\begin{equation*}
+  \Omega(g(n)) = \{f(n): \exists c, n_0 > 0 \text{ такие, что }
+  0 \leqslant c g(n) \leqslant f(n), \forall n > n_0
+  \}
+\end{equation*}
+
+Пример:
+\begin{equation*}
+  \sqrt(n) = \Omega(lg n) \text{ для } c = 1, n_0 = 16
+\end{equation*}
+
+\subsection{$\Theta$-обозначения}
+
+Для точной оценки используется $\Theta$-обозначение. Его можно ввести несколькими способами:
+\begin{itemize}
+\item Теорема: для любых двух функций $f(n)$ и $g(n)$ соотношение $f(n)~=~\Theta(g(n))$ верно тогда и только тогда, когда $f(n)~=~O(g(n))$ и $f(n)~=~\Omega(g(n))$
+\item Пересечение множеств: $f(n)~=~\Theta(g(n))$ $\iff$ $f(n)~=~O(g(n))~\cap~\Omega(g(n))$
+\end{itemize}
+
+Пример:
+\begin{equation*}
+  {1 \over 2}n^2 - 2n = \Theta(n^2)
+\end{equation*}
+
+\subsection{$o$- и $\omega$-обозначения}
+
+$o$- и $\omega$-обозначения являются версиями определений $O$ и $\Omega$, которые выполняются 
+\emph{для любой константы $c$}, т.е. не являются асимптотически строгими. Формально:
+\begin{equation*}
+  o(g(n)) = \{f(n): \forall c > 0: \exists n_0 > 0 \text{ такое, что }
+  0 \leqslant f(n) \leqslant c g(n), \forall n > n_0
+  \}
+\end{equation*}
+Функция $f(n)$ пренебрежима мала по сравнению с функцией $g(n)$ при $n$ стремящемся к бесконечности, т.е.: 
+\begin{equation*}
+  \lim_{x\to\infty} { f(x) \over g(n) } = 0
+\end{equation*}
+Пример:
+\begin{equation*}
+  2n^2 = o(n^3) \text{ для } n_0 = {2 \over c}
+\end{equation*}
+Аналогично:
+\begin{equation*}
+  \omega(g(n)) = \{f(n): \forall c > 0: \exists n_0 > 0 \text{ такое, что }
+  0 \leqslant c g(n) \leqslant f(n), \forall n > n_0
+  \}
+\end{equation*}
+Пример:
+\begin{equation*}
+  \sqrt(n) = \omega(lg n) \text{ для } n_0 = 1 + {1 \over c}
+\end{equation*}
+
+\subsection{Некоторые свойства}
+
+Из определений вытекают некоторые свойства асимтотических сравнений:
+
+\begin{itemize}
+\item Транзитивность
+\begin{equation*}
+  f(n) = \Theta(g(n)) \land g(n) = \Theta(h(n)) \Rightarrow f(n) = \Theta(h(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = O(g(n)) \land g(n) = O(h(n)) \Rightarrow f(n) = O(h(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = \Omega(g(n)) \land g(n) = \Omega(h(n)) \Rightarrow f(n) = \Omega(h(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = o(g(n)) \land g(n) = o(h(n)) \Rightarrow f(n) = o(h(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = \omega(g(n)) \land g(n) = \omega(h(n)) \Rightarrow f(n) = \omega(h(n))
+\end{equation*}
+
+\item Рефлексивность
+\begin{equation*}
+  f(n) = \Theta(f(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = O(f(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = \Omega(f(n))
+\end{equation*}
+
+\item Симметричность
+\begin{equation*}
+  f(n) = \Theta(g(n)) \iff g(n) = \Theta(f(n))
+\end{equation*}
+
+\item Перестановочная симметрия
+\begin{equation*}
+  f(n) = O(g(n)) \iff g(n) = \Omega(f(n))
+\end{equation*}
+\begin{equation*}
+  f(n) = o(g(n)) \iff g(n) = \omega(f(n))
+\end{equation*}
+\end{itemize}
+
+Таким образом можно провести аналогию между символами нотации и операциями
+сравнения рациональных чисел:
+\begin{equation*}
+  f(n) = \Theta(g(n)) \approx f(n) = g(n)
+\end{equation*}
+\begin{equation*}
+  f(n) = O(g(n)) \approx f(n) \leqslant  g(n)
+\end{equation*}
+\begin{equation*}
+  f(n) = \Omega(g(n)) \approx f(n) \geqslant g(n)
+\end{equation*}
+\begin{equation*}
+  f(n) = o(g(n)) \approx f(n) < g(n)
+\end{equation*}
+\begin{equation*}
+  f(n) = \omega(g(n)) \approx f(n) > g(n)
+\end{equation*}
+
+\section{Рекуррентные соотношения}
+
+По определению, рекуррентное соотношение -- это уравнение или неравенство,
+описывающее функцию с использованием её самой, но только с меньшими аргументами.
+Обычно рекуррентное соотношение описывается в виде системы граничных условий
+и формулы для общего случая, например:
+
+\begin{equation*}
+  T(n) = \begin{cases}
+    \Theta(1), \text{ если } n = 1 \\
+    2\Theta(n/2) + \Theta(n), \text{ если } n > 1
+    \end{cases}
+\end{equation*}
+
+Для решения таких соотношений использутся несколько методов: подстановки, деревьев
+рекурсии и основной метод.
+
+\section{Метод подстановки}
+
+Метод состоит из трех шагов:
+\begin{itemize}
+\item делается догадка о виде решения
+\item с помощью метода математической индукции доказывается, что решение правильное
+\item вычисляются константы 
+\end{itemize}
+Пример:
+
+\section{Метод деревьев рекурсии}
+
+\section{Основной метод}
+
+
+\end{document}
