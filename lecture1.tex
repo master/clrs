@@ -288,7 +288,7 @@ $\Theta(n)$    & 3. Объединить их (merge)
 \begin{equation}
   T(n) = \begin{cases}
     \Theta(1), \text{ если } n = 1 \\
-    2\Theta(n/2) + \Theta(n), \text{ если } n > 1
+    2T(n/2) + \Theta(n), \text{ если } n > 1
     \end{cases}
   \label{eq:recur}
 \end{equation}
