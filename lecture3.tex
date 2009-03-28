@@ -299,4 +299,101 @@ C &= A \cdot B
 
 Неожиданно! Решение оказалось точно таким же, как и оригинальное :)
 
+\section{Алгоритм Штрассена}
+Умножить матрицы $2 \times 2$ с помощью семи перемножений, а не восьми.
+
+$$P_1 = a(f - h)$$
+$$P_2 = (a + b)h$$
+$$P_3 = (c + d)e$$
+$$P_4 = d(g - e)$$
+$$P_5 = (a + d)(e + h)$$
+$$P_6 = (b - d)(g + h)$$
+$$P_7 = (a - c)(e + f)$$
+
+А потом можно посчитать $r, s, t, u$ с помощью таких формул:
+
+$$r = P_5 + P_4 - P_2 + P_6$$
+$$s = P_1 + P_2$$
+$$t = P_3 + P_4$$
+$$u = P_5 + P_1 - P_3 - P_7$$
+
+В итоге получаем 7 рекурсивных умножений и 18 сложений/вычитаний (которые
+выполняются за $\Theta(n^2)$
+
+Убедимся в правильности формулы на примере $r$:
+\begin{align*}
+  r \\
+  = P_5 + P_4 - P_2 + P_6 \\
+  = (a + d)(e + h) + d(g - e) - (a + b)h + (b - d)(g + h) \\
+  = ae + ah + de + dh + dg - de - ah - bh + bg + bh - dg - dh \\
+  = ae + bg
+\end{align*}
+
+Рассмотрим алгоритм Штрассена с точки зрения подхода ``разделяй и властвуй'':
+
+\begin{enumerate}
+\item Разделение: разделить $A$ и $B$ на $(n/2) \times (n/2)$ подматрицы.
+  Сформировать множители   с помощью сложения и вычитания матриц
+\item Покорение: рекурсивно выполнить 7 умножений подматриц
+\item Объединение: получить матрицу $C$ с помощью сложения и вычитания матриц.
+\end{enumerate}
+
+Рекуррентность для времени выполнения:
+\begin{equation*}
+  T(n) = 7T(n/2) + \Theta(n^2)
+\end{equation*}
+
+$n^{\log_b a} = n^{\log_2 7} = n^{2.81} \Rightarrow \text{ Случай 1 }
+\Rightarrow T(n) = \Theta(n^{\lg 7})$
+
+Лучший результат известный на сегодня -- это $\Theta(n^{2.376}$
+
+\section{VLSI-деревья}
+
+Задача: разместить полное бинарное деревьев в квадратной сетке (будто на схеме),
+использую минимальную площадь.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=4in]{lecture3/tree1.eps}
+  \caption{Дерево}
+  \label{fig:tree1}
+\end{figure}
+
+\begin{equation*}
+  H(n) = H(n/2) + \Theta(1) = \Theta(\lg n)
+\end{equation*}
+
+\begin{equation*}
+  W(n) = 2W(n/2) + \Theta(1) = \Theta(n)
+\end{equation*}
+
+\begin{equation*}
+  \text{Площадь }= \Theta(n \lg n)
+\end{equation*}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=3in]{lecture3/tree2.eps}
+  \caption{Дерево 2}
+  \label{fig:tree2}
+\end{figure}
+
+\begin{equation*}
+  L(n) = 2L(n/4) + \Theta(1) = \Theta(\sqrt n)
+\end{equation*}
+
+\begin{equation*}
+  \text{Площадь }= \Theta(n)
+\end{equation*}
+
+\section{Заключение}
+\begin{itemize}
+\item ``Разделяй и властвуй'' -- одна из нескольких мощных техник для разработки
+  алгоритмов
+\item Оценка времени выполнения этих алгоритмов сводится к рекуррентностям,
+  которые легко решаются Основной теоремой
+\item Стратегия ``Разделяй и властвуй'' часто позволяет получить весьма
+  эффективные алгоритмы
+\end{itemize}
 \end{document}
