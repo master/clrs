@@ -143,16 +143,16 @@ T(n) \leqslant 2T(\frac{n}{2}) + \Theta(n)
   \label{fig:tree2}
 \end{figure}
 
-Время работы каждого уровня дерева будет $\leqslant c n$. Глубина дерева будет разной для левой и правой ветви (рис. \ref{fig:tree2}). В левой части $\log_{10} n$, в правой $\log_{\frac{10}{9}} n$
+Время работы каждого уровня дерева будет $\leqslant c n$. Глубина дерева будет разной для левой и правой ветви (рис. \ref{fig:tree2}). В левой части $\log_{10}n$, в правой $\log_{\frac{10}{9}}n$
 \begin{align*}
   T(n) \leqslant \\
-    \leqslant c n \log{\frac{10}{9}} + \Theta(n) = \\
+    \leqslant c n \log_{\frac{10}{9}}n + \Theta(n) = \\
     = O(n \lg n)
 \end{align*}
 
 \begin{align*}
   T(n) \geqslant \\
-    \geqslant c n \log{10} + \Theta(n)
+    \geqslant c n \log_{10}n + \Theta(n)
 \end{align*}
 
 Таким образом, $T(n) = \Theta(n \lg n)$
@@ -275,7 +275,7 @@ E[X_i] = 1/i
 	= \sum_i \frac{1}{i} = \text{ (гармоническое число)} \\ 
 	= \ln n + O(1)
 \end{align*}
-Таким образом, если проведено интервью со всеми $n$ кандидатами, в среднем будет нанято $\ln n$ из них. Тогда полная стоимость найма будет составлять $\O(c_h \ln n)$.
+Таким образом, если проведено интервью со всеми $n$ кандидатами, в среднем будет нанято $\ln n$ из них. Тогда полная стоимость найма будет составлять $O(c_h \ln n)$.
 
 \section{Рандомизированный Quicksort}
 
@@ -312,7 +312,60 @@ T(n) \leqslant \max_{0 \leqslant q \leqslant n-1} (cq^2 + c(n - q -1)^2) + \Thet
 \end{align*}
 Т.е. $T(n) = O(n^2)$. Аналогично доказывается $T(n) = \Omega(n^2)$
 
-Для среднего случая рандомизированной версии Quicksort когда все элементы во входном
-массиве различны.
+Для среднего случая рандомизированной версии Quicksort, когда все элементы во входном
+массиве различны, время работы $T(n) = \Theta(n \lg n)$.
+
+\subsection{Схема доказательства}
+
+Для $k = 0, 1, \twodots, n-1$ индикаторные случайные переменные
+\begin{equation*}
+X_k = \begin{cases}
+  1 \text{, если было сгенерировано разбиение } k:n-k-1 \\
+  0 \text{, в противном случае}
+\end{cases}
+\end{equation*}
+равны $0$ все кроме одной. Тогда мат. ожидание
+\begin{equation*}
+E[X_k] = Pr {X_k = 1} = \frac{1}{n} \text{, т.к. все разбиения равновероятны}
+\end{equation*}
+Время работы алгоритма
+\begin{equation*}
+T(n) = \begin{cases}
+  T(0) + T(n-1) + \Theta(n) \text{, для разбиения } 0:n-1 \\
+  T(1) + T(n-2) + \Theta(n) \text{, для разбиения } 1:n-2 \\
+  \twodots \\
+  T(n-1) + T(0) + \Theta(n) \text{, для разбиения } n-1:0
+\end{cases}
+\end{equation*}
+Используя индикаторную переменную, можно перейти от системы к сумме:
+\begin{equation*}
+= \sum_{k=0}^{n-1}X_k(T(k) + T(n - k -1) + \Theta(n))
+\end{equation*}
+Мат. ожидание времени работы рандомизированного Quicksort будет равно:
+\begin{equation*}
+E[T(n)] = \sum E[X_k] E[T(k) + T(n - k -1) + \Theta(n)] =
+\end{equation*}
+используя свойство линейности мат. ожидания и независимость переменных $X_k$:
+\begin{equation*}
+= \frac{1}{n}\sum_{k=0}^{n-1}E[T(k)] + \frac{1}{n}\sum_{k=0}^{n-1}E[T(n - k -1)] + \frac{1}{n}\sum_{k=0}^{n-1}\Theta(n) =
+\end{equation*}
+можно показать, что два первых слогаемых равны:
+\begin{equation*}
+= \frac{2}{n}\sum_{k=0}^{n-1}E[T(k)] + \frac{1}{n}\Theta(n^2) =
+\end{equation*}
+случаи $k=0$ и $k=1$ константны:
+\begin{equation*}
+= \frac{2}{n}\sum_{k=2}^{n-1}E[T(k)] + \Theta(n)
+\end{equation*}
+
+Используя метод подстановок, можно показать, что
+\begin{equation*}
+E[T(n)] \leqslant a n \lg n \text{, для } a > 0
+\end{equation*}
+
+Уазание: использовать неравенство:
+\begin{equation*}
+\sum_{k=2}^{n-1}k \lg k \leqslant \frac{1}{2} n^2 \lg n - \frac{1}{8} n^2
+\end{equation*}
 
 \end{document}
