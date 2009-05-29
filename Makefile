@@ -1,4 +1,4 @@
-TEXFILE	= syllabus.tex lecture1.tex lecture2.tex lecture3.tex lecture4.tex lecture5.tex lecture6.tex
+TEXFILE	= syllabus.tex lecture1.tex lecture2.tex lecture3.tex lecture4.tex lecture5.tex lecture6.tex lecture8.tex lecture9.tex
 
 .PHONY: dvi ps pdf clean
 
