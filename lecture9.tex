@@ -148,19 +148,19 @@
 Лемма доказывается по индукции:
 \begin{align*}
   f(\sum_{k=1}^{n} \alpha_k x_k) = \text{(по индукционной гипотезе)} \\ 
-  = f(a_n x_n + (1-x_n) \sum_{k=1}^{n-1} \frac{a_k}{1-\alpha_n} x_k) = \text{(отделяем меньшую часть)} \\
+  = f(a_n x_n + (1-\alpha_n) \sum_{k=1}^{n-1} \frac{a_k}{1-\alpha_n} x_k) = \text{(отделяем меньшую часть)} \\
   \text{т.к. } \alpha_n + (1-\alpha_n) = 1 \text{ и сумма всех } \alpha_k = 1 - \alpha_n \\
   \leqslant \alpha_n f(x_n) + (1-\alpha_n)f(\sum_{k=1}^{n-1} \frac{a_k}{1-\alpha_n} x_k) \leqslant \text{(по свойству выпуклой функции)} \\
   \leqslant \alpha_n f(x_n) + (1-\alpha_n)\sum_{k=1}^{n-1} \frac{a_k}{1-\alpha_n} f(x_k) = \text{(по индукционной гипотезе)} \\
-  = \sum_{k=1}^{n} f(x_k) \text{(ч.т.д.)}
+  = \sum_{k=1}^{n} \alpha_k f(x_k) \text{(ч.т.д.)}
 \end{align*}
 
 Случай для бесконечного числа переменных $x_n$ доказывается аналогично: от обоих частей уравнения берется предел при $n \to \infty$.
 
 Доказательство неравенства Йенсена: $f(E[X]) \leqslant E[f(X)]$, если $f$ -- выпуклая функция.
 \begin{align*}
-  f(E[X]) = f(\sum_{x} k Pr[X = x]) \leqslant \text{(т.к. сумма вероятностей равна 1)} \\
-  \leqslant \sum_{x= - \infty}^{\infty} Pr[X = k] f(x) = \\ 
+  f(E[X]) = f(\sum_{x = - \infty}^{\infty} x Pr[X = x]) \leqslant \text{(т.к. сумма вероятностей равна 1)} \\
+  \leqslant \sum_{x= - \infty}^{\infty} Pr[X = x] f(x) = \\ 
   = \sum_{y \in range(f)} y \sum_{x = f(x) = y} Pr[X = y] = \\
   = \sum_{y \in range(f)} y Pr[f(X) = y] = \\
   = E[f(X)] \text{(ч.т.д.)}
@@ -204,8 +204,8 @@
 \end{align*}
 В итоге:
 \begin{align*}
-  E[2^X_n] = E[Y_n] = O(n^3) \\
-  2^E[X_n] \leqslant E[2^X_n] \\
+  E[2^{X_n}] = E[Y_n] = O(n^3) \\
+  2^E[X_n] \leqslant E[2^{X_n}] \\
   E[X_n] \leqslant \lg O(n^3) \\
   \text{(константа, присутствующая в O выносится)} \\
   E[X_n] \leqslant 3 \lg n + O(1) \\
@@ -219,8 +219,8 @@
 \li \Then \Return $x$
 \End
 \li \If $k < key[x]$
-\li \Then \Return $Tree_Search(left[x], k)$
-\li \Else \Return $Tree_Search(left[x], k)$
+\li \Then \Return $Tree\_Search(left[x], k)$
+\li \Else \Return $Tree\_Search(left[x], k)$
 \End
 \end{codebox}
 Процедуру можно превратить в итеративную с помощью хвостовой рекурсии.
