@@ -1,19 +1,35 @@
 TEXFILE	= syllabus.tex lecture1.tex lecture2.tex lecture3.tex lecture4.tex lecture5.tex lecture6.tex lecture7.tex lecture8.tex lecture9.tex lecture10.tex
 
-.PHONY: dvi ps pdf clean
+.PHONY: pdf clean 
+
+.PRECIOUS: %.bbl
 
 pdf:	$(TEXFILE:.tex=.pdf)
-ps:	$(TEXFILE:.tex=.ps)
-dvi:	$(TEXFILE:.tex=.dvi)
 
-%.dvi: %.tex
+define run-latex
 	( \
-	latex $<; \
-	while grep -q "Rerun to get cross-references right." $(<:.tex=.log); \
+	latex $(<:.aux=.tex); \
+	while grep -Eq "(undefined references|get cross-references right)" $(<:.aux=.log); \
 	do \
-		latex $<; \
+		latex $(<:.aux=.tex); \
 	done \
 	)
+endef
+
+%.dvi: %.tex
+
+%.aux: %.tex
+	latex $<
+	rm -f $(<:.tex=.dvi)
+
+%.bbl: %.aux %.bib
+	bibtex $<
+
+%.dvi: %.aux %.bbl
+	@$(run-latex)
+
+%.dvi: %.aux
+	@$(run-latex)
 
 %.ps: %.dvi
 	dvips -q $< -o $(<:.dvi=.ps)
@@ -22,11 +38,5 @@ dvi:	$(TEXFILE:.tex=.dvi)
 	ps2pdf $<
 
 clean:
-	@rm -f \
-	$(TEXFILE:.tex=.aux) \
-	$(TEXFILE:.tex=.log) \
-	$(TEXFILE:.tex=.out) \
-	$(TEXFILE:.tex=.dvi) \
-	$(TEXFILE:.tex=.pdf) \
-	$(TEXFILE:.tex=.toc) \
-	$(TEXFILE:.tex=.ps)
+	@rm -f *.aux *.log *.out *.dvi *.pdf *.toc *.bbl *.blg *.ps
+
