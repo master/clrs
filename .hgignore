@@ -5,3 +5,5 @@
 \.ps$
 \.pdf$
 \.tex~$
+\.bbl$
+\.blg$
