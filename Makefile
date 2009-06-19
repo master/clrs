@@ -1,7 +1,7 @@
 TEXFILE	= syllabus.tex lecture1.tex lecture2.tex lecture3.tex \
 	lecture4.tex lecture5.tex lecture6.tex lecture7.tex \
 	lecture8.tex lecture9.tex lecture10.tex lecture11.tex \
-	lecture13.tex
+	lecture12.tex lecture13.tex
 
 .PHONY: pdf clean 
 
