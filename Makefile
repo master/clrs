@@ -3,7 +3,7 @@ TEXFILE	= syllabus.tex lecture1.tex lecture2.tex lecture3.tex \
 	lecture8.tex lecture9.tex lecture10.tex lecture11.tex \
 	lecture12.tex lecture13.tex lecture14.tex lecture15.tex \
 	lecture16.tex lecture17.tex lecture18.tex lecture19.tex \
-	lecture20.tex \
+	lecture20.tex lecture21.tex \
 	students.tex 
 
 .PHONY: pdf clean 
